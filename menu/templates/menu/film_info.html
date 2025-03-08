@@ -1,0 +1,35 @@
+{% extends 'register/base.html' %}
+
+{% block title %}{{ film.name }}{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-5 gap-6">
+
+    <div class="col-span-3">
+        <img src="{{ film.image_url }}" class="w-full h-[900px] object-contain rounded-xl"> <!-- object-contain -->
+    </div>
+
+    <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">{{ film.title }}</h1>
+
+        {% if film.description %}
+            <p class="text-gray-700 pb-6">
+                <strong class="text-gray-500">Описание:</strong><br>
+                {{ film.description }}
+            </p>
+            <p class="text-gray-700 pb-6">
+                <strong class="text-gray-500">Жанр:</strong><br>
+                {{ film.generes }}
+            </p>
+            <p class="text-gray-700 pb-6">
+                <strong class="text-gray-500">Ключевые слова:</strong><br>
+                {{ film.keywords }}
+            </p>
+        {% endif %}
+
+        <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl text-white" href="#">
+            Избранное
+        </a>
+    </div>
+</div>
+{% endblock %}
