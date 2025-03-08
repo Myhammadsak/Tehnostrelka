@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Film(models.Model):
@@ -11,3 +12,12 @@ class Film(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Follow(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.film}'
