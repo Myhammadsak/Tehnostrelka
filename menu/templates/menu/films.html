@@ -1,0 +1,69 @@
+{% extends 'register/base.html' %}
+
+{% block title %}Фильмы{% endblock %}
+
+{% block content %}
+    <div class="pb-6 grid grid-cols-3 gap-3 bg-gray-100">
+        <div class="col-span-3">
+            <form method="get" action="{% url 'menu:films' %}" class='flex gap-3'>
+                <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text"
+                       value="{{ query }}" placeholder="Поиск по названию, ключевым словам и описанию">
+
+                <button class="mt-2 py-6 px-8 text-lg bg-blue-500 hover:bg-blue-700 text-white rounded-xl">
+                    Поиск
+                </button>
+            </form>
+        </div>
+
+        <div class="col-span-3">
+            <div class="grid grid-cols-3 gap-3">
+                {% for film in page_obj %}
+                    <div>
+                        <a href="{% url 'menu:film_info' film.pk %}">
+                            <div>
+                                <img style="height:65vh;width:700px;" src="{{ film.image_url }}"
+                                class="rounded-t-xl">
+                            </div>
+
+                            <div class="p-6 bg-white rounded-b-xl">
+                                <h2 class="text-2xl">{{ film.title }}</h2>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        <div class="pagination">
+            <span>
+                Page {{ page_obj.number }} in {{ page_obj.paginator.num_pages }}
+            </span>
+        </div>
+
+        <div class="mt-6">
+            {% if page_obj.has_previous %}
+                <a class="mt-6 py-4 px-8 text-lg bg-blue-500
+                 hover:bg-blue-700 rounded-xl text-white" href="?page=1">Первая</a>
+                <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+                 rounded-xl text-white" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <strong class="mt-6 py-4 px-8 text-lg bg-blue-500
+                    hover:bg-blue-700 rounded-xl text-white">{{ num }}</strong>
+                {% else %}
+                    <a class="mt-6 py-4 px-8 text-lg bg-blue-500
+                    hover:bg-blue-700 rounded-xl text-white" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="mt-6 py-4 px-8 text-lg bg-blue-500
+                hover:bg-blue-700 rounded-xl text-white" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            {% endif %}
+        </div>
+
+        </div>
+    </div>
+{% endblock %}
