@@ -9,7 +9,7 @@ def films_list(request):
     films = Film.objects.all()
 
     if query:
-        films = films.filter(Q(title__icontains=query) | Q(description__icontains=query))
+        films = films.filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(keywords__icontains=query))
 
     paginator = Paginator(films, 6)
 
