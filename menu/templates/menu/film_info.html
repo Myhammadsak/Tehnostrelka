@@ -27,9 +27,19 @@
             </p>
         {% endif %}
 
-        <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl text-white" href="#">
+        <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+        rounded-xl text-white" href="{% url 'menu:add_follow' film.pk %}">
             Избранное
         </a>
+        {% if messages %}
+            <div class="mt-6">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
