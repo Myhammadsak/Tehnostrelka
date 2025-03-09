@@ -1,11 +1,26 @@
-from transformers import AutoModel, AutoTokenizer
 import torch
+from transformers import AutoModel, AutoTokenizer
+from sentence_transformers import SentenceTransformer, CrossEncoder, util
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-tokenizer = AutoTokenizer.from_pretrained('DiTy/bi-encoder-russian-msmarco')
-model = AutoModel.from_pretrained('DiTy/bi-encoder-russian-msmarco')
+tokenizer = AutoTokenizer.from_pretrained('shibing624/text2vec-base-multilingual')
+model = AutoModel.from_pretrained('shibing624/text2vec-base-multilingual')
 model.to(device)
+
+
+# CACHE_DIR = "./hf_cache"
+
+# Загружаем Retriever
+# retriever = SentenceTransformer(
+#     model_name_or_path="DiTy/bi-encoder-russian-msmarco",
+# )
+
+# Загружаем Re-Ranker
+reranker_model = CrossEncoder(
+    model_name="DiTy/cross-encoder-russian-msmarco", 
+    max_length=512,
+)
 
 
 def mean_pooling(model_output, attention_mask):
@@ -15,7 +30,7 @@ def mean_pooling(model_output, attention_mask):
 
 
 def embed_sentence(sentence):
-    encoded_input = tokenizer(sentence, max_length=512, padding='max_length', truncation=True, return_tensors='pt')
+    encoded_input = tokenizer(sentence, max_length=512, padding='max_length', truncation=True, return_tensors='pt').to(device)
 
     with torch.no_grad():
         model_output = model(**encoded_input)
@@ -25,12 +40,12 @@ def embed_sentence(sentence):
     return sentence_embeddings[0]
 
 
-if __name__ == "__main__":
-    sentences = [
-        'красный плоский лишай вызван стрессом',
-        'В большинстве случаев причину появления красного плоского лишая невозможно. Это не вызвано стрессом, но иногда эмоциональный стресс усугубляет ситуацию. Известно, что это заболевание возникает после контакта с определенными химическими веществами, такими как те, которые используются для проявления цветных фотографий. У некоторых людей определенные лекарства вызывают красный плоский лишай. Эти препараты включают лекарства от высокого кровяного давления, болезней сердца, диабета, артрита и малярии, антибиотики, нестероидные противовоспалительные обезболивающие и т. Д.',
-        'К сожалению для работодателей, в разных штатах страны есть несколько дел, по которым суды установили, что стресс, вызванный работой, может быть основанием для увольнения с работы, если стресс достигает уровня серьезного состояния здоровья, которое вызывает они не могут выполнять свою работу.',
-    ]
+# if __name__ == "__main__":
+    # sentences = [
+    #     'красный плоский лишай вызван стрессом',
+    #     'В большинстве случаев причину появления красного плоского лишая невозможно. Это не вызвано стрессом, но иногда эмоциональный стресс усугубляет ситуацию. Известно, что это заболевание возникает после контакта с определенными химическими веществами, такими как те, которые используются для проявления цветных фотографий. У некоторых людей определенные лекарства вызывают красный плоский лишай. Эти препараты включают лекарства от высокого кровяного давления, болезней сердца, диабета, артрита и малярии, антибиотики, нестероидные противовоспалительные обезболивающие и т. Д.',
+    #     'К сожалению для работодателей, в разных штатах страны есть несколько дел, по которым суды установили, что стресс, вызванный работой, может быть основанием для увольнения с работы, если стресс достигает уровня серьезного состояния здоровья, которое вызывает они не могут выполнять свою работу.',
+    # ]
 
-    for i in sentences:
-        print(embed_sentence(i).shape)
+    # for i in sentences:
+    #     print(embed_sentence(i).shape)
