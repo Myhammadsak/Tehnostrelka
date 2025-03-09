@@ -40,6 +40,45 @@
                 {% endfor %}
             </div>
         {% endif %}
+
+         <div class="flex items-center mb-6 mt-12">
+            <div class="rating text-2xl text-yellow-400">
+                {% for i in "12345" %}
+                    {% if i|add:0 <= film.rating %}
+                        ★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <span class="ml-2 text-gray-600">({{ film.rating|floatformat:1 }})</span>
+        </div>
+
+        {% if user_rating %}
+            <div class="mb-4 text-green-600">
+                Вы оценили этот фильм на {{ user_rating }} звезд.
+            </div>
+        {% endif %}
+
+        <div class="rating-form bg-white p-6 rounded-lg shadow-md">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Оцените фильм:</label>
+                    <div class="flex space-x-4">
+                        {% for choice in form.stars %}
+                            <label class="inline-flex items-center">
+                                {{ choice.tag }}
+                                <span class="ml-2">{{ choice.choice_label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Оценить
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

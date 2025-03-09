@@ -1,26 +1,26 @@
 {% extends 'register/base.html' %}
 
-{% block title %}Избранное{% endblock %}
+{% block title %}Оценки{% endblock %}
 
 {% block content %}
-    <h2 class="mb-12 text-2xl text-center">Избранное</h2>
+    <h2 class="mb-12 text-2xl text-center">Мои оценки</h2>
 
     <div class="pb-6 grid grid-cols-3 gap-3 bg-gray-100">
 
         <div class="col-span-3">
             <div class="grid grid-cols-3 gap-3">
-                {% for follow in page_obj %}
+                {% for rating in page_obj %}
                     <div>
-                        <a href="{% url 'menu:film_info' follow.film.pk %}">
+                        <a href="{% url 'menu:film_info' rating.film.pk %}">
                             <div>
-                                <img style="height:65vh;width:700px;" src="{{ follow.film.image_url }}"
+                                <img style="height:65vh;width:700px;" src="{{ rating.film.image_url }}"
                                 class="rounded-t-xl">
                             </div>
 
                              <div class="p-6 bg-white rounded-b-xl flex items-center justify-between">
-                                <h2 class="text-2xl">{{ follow.film.title }}</h2>
+                                <h2 class="text-2xl">{{ rating.film.title }}</h2>
                                 <a class="py-4 px-8 text-lg bg-red-500
-                                hover:bg-red-700 rounded-xl text-white" href="{% url 'menu:remove_follow' follow.film.pk %}">
+                                hover:bg-red-700 rounded-xl text-white" href="{% url 'menu:remove_rating' rating.film.pk %}">
                                     Удалить
                                 </a>
                             </div>

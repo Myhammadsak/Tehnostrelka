@@ -4,8 +4,9 @@
 #
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tehnostrelka.settings')
 # django.setup()
+
+from menu.models import Film
 #
-# from menu.models import Film
 #
 # def import_data_from_csv(csv_file_path):
 #     with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
@@ -19,11 +20,10 @@
 #                 image_url=row['ImageLink']
 #             )
 #
-# if __name__ == "__main__":
-#     csv_file_path = "films.csv"
-#     import_data_from_csv(csv_file_path)
 #
-# from menu.models import Film
+# if __name__ == "__main__":
+#     csv_file_path = "films_info.csv"
+#     import_data_from_csv(csv_file_path)
 #
 # for product in Film.objects.all():
 #     if product.image_url.startswith('//'):

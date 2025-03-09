@@ -34,35 +34,71 @@
             </div>
 
 
-        <div class="pagination">
-            <span>
-                Page {{ page_obj.number }} in {{ page_obj.paginator.num_pages }}
-            </span>
-        </div>
+            <div class="pagination">
+                <span>
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+            </div>
 
-        <div class="mt-6">
-            {% if page_obj.has_previous %}
-                <a class="mt-6 py-4 px-8 text-lg bg-blue-500
-                 hover:bg-blue-700 rounded-xl text-white" href="?page=1">Первая</a>
-                <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
-                 rounded-xl text-white" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-            {% endif %}
-
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <strong class="mt-6 py-4 px-8 text-lg bg-blue-500
-                    hover:bg-blue-700 rounded-xl text-white">{{ num }}</strong>
-                {% else %}
+            <div class="mt-6">
+                {% if page_obj.has_previous %}
                     <a class="mt-6 py-4 px-8 text-lg bg-blue-500
-                    hover:bg-blue-700 rounded-xl text-white" href="?page={{ num }}">{{ num }}</a>
+                    hover:bg-blue-700 rounded-xl text-white" href="?page=1">Первая</a>
+                    <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl
+                    text-white" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
                 {% endif %}
-            {% endfor %}
 
-            {% if page_obj.has_next %}
-                <a class="mt-6 py-4 px-8 text-lg bg-blue-500
-                hover:bg-blue-700 rounded-xl text-white" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-            {% endif %}
-        </div>
+                {% with start=page_obj.number|add:"-4" end=page_obj.number|add:"4" %}
+                    {% if start < 1 %}
+                        {% with start=1 end=9 %}
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num >= start and num <= end %}
+                                    {% if page_obj.number == num %}
+                                        <strong class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+                                        rounded-xl text-white">{{ num }}</strong>
+                                    {% else %}
+                                        <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+                                        rounded-xl text-white" href="?page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    {% elif end > page_obj.paginator.num_pages %}
+                        {% with start=page_obj.paginator.num_pages|add:"-8" end=page_obj.paginator.num_pages %}
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num >= start and num <= end %}
+                                    {% if page_obj.number == num %}
+                                        <strong class="mt-6 py-4 px-8 text-lg bg-blue-500
+                                        hover:bg-blue-700 rounded-xl text-white">{{ num }}</strong>
+                                    {% else %}
+                                        <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+                                        rounded-xl text-white" href="?page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    {% else %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if num >= start and num <= end %}
+                                {% if page_obj.number == num %}
+                                    <strong class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700
+                                    rounded-xl text-white">{{ num }}</strong>
+                                {% else %}
+                                    <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl
+                                    text-white" href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% if page_obj.has_next %}
+                    <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl
+                    text-white" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                    <a class="mt-6 py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl
+                    text-white" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                {% endif %}
+            </div>
 
         </div>
     </div>
