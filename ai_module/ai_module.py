@@ -4,29 +4,22 @@ from sentence_transformers import SentenceTransformer, CrossEncoder, util
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# tokenizer = AutoTokenizer.from_pretrained('DiTy/bi-encoder-russian-msmarco')
-# model = AutoModel.from_pretrained('DiTy/bi-encoder-russian-msmarco')
-# model.to(device)
+tokenizer = AutoTokenizer.from_pretrained('shibing624/text2vec-base-multilingual')
+model = AutoModel.from_pretrained('shibing624/text2vec-base-multilingual')
+model.to(device)
 
 
 # CACHE_DIR = "./hf_cache"
 
 # Загружаем Retriever
-retriever = SentenceTransformer(
-    model_name_or_path="DiTy/bi-encoder-russian-msmarco",
-    # cache_folder=CACHE_DIR,
-)
+# retriever = SentenceTransformer(
+#     model_name_or_path="DiTy/bi-encoder-russian-msmarco",
+# )
 
 # Загружаем Re-Ranker
 reranker_model = CrossEncoder(
     model_name="DiTy/cross-encoder-russian-msmarco", 
     max_length=512,
-    # automodel_args={
-    #     "cache_dir": CACHE_DIR,
-    # },
-    # tokenizer_args={
-    #     "cache_dir": CACHE_DIR,
-    # }
 )
 
 
