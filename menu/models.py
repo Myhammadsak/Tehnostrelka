@@ -9,6 +9,7 @@ class Film(models.Model):
     generes = models.TextField()
     keywords = models.TextField()
     image_url = models.URLField()
+    rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.title
@@ -21,3 +22,11 @@ class Follow(models.Model):
 
     def __str__(self):
         return f'{self.film}'
+
+
+class Generes(models.Model):
+
+    name = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name

@@ -18,4 +18,4 @@ def signup(request):
 
 def logout_v(request):
     logout(request)
-    return redirect('/')
+    return redirect('/#')

@@ -2,13 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Film, Follow
+from .models import Film, Follow, Generes
 from django.contrib import messages
 
 
 def films_list(request):
     query = request.GET.get('query', '')
     films = Film.objects.all()
+
+    genres = Generes.objects.all()
 
     if query:
         films = films.filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(keywords__icontains=query))
@@ -20,7 +22,8 @@ def films_list(request):
 
     return render(request, 'menu/films.html', context={'films': films,
                                                        'query': query,
-                                                       'page_obj': page_obj})
+                                                       'page_obj': page_obj,
+                                                       'genres': genres})
 
 
 def film_info(request, pk):
@@ -62,3 +65,9 @@ def follow(request):
         'follow_film': follow_film,
         'page_obj': page_obj
     })
+
+
+def genre_films(request, pk):
+    genre = get_object_or_404(Generes, pk=pk)
+    films = Film.objects.filter(generes__contains=genre.name)
+    return render(request, 'menu/films_by_genre.html', {'genre': genre, 'films': films})
