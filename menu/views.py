@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Film, Follow, Generes, Rating
 from django.contrib import messages
 from .forms import RatingForm
+from ai_module.vec_db import COLLECTION_NAME, search_nearest
+from ai_module.ai_module import embed_sentence
 
 
 def films_list(request):
@@ -13,8 +15,14 @@ def films_list(request):
 
     genres = Generes.objects.all()
 
+    name = search_nearest(COLLECTION_NAME, query)[0].payload['title']
+    name2 = search_nearest(COLLECTION_NAME, query)[1].payload['title']
+    name3 = search_nearest(COLLECTION_NAME, query)[2].payload['title']
+
     if query:
-        films = films.filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(keywords__icontains=query))
+        films = films.filter(Q(title__icontains=query) | Q(description__icontains=query)
+                             | Q(keywords__icontains=query) | Q(title__icontains=name)
+                             | Q(title__icontains=name2) | Q(title__icontains=name3))
 
     paginator = Paginator(films, 6)
 

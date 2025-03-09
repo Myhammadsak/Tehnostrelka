@@ -1,6 +1,6 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance
-from ai_module import embed_sentence # , retriever, reranker_model
+from .ai_module import embed_sentence # , retriever, reranker_model
 
 client = QdrantClient(host='127.0.0.1', port=6333)
 
